@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -12,14 +12,14 @@
         <h1>План по изучению Vue.js</h1>
 
         <div class="steps">
-          <div class="steps-content">{{ steps[active].text }}</div>
+          <div class="steps-content">{{ steps[activeIndex].text }}</div>
           <ul class="steps-list">
             <li
               v-for="(step, idx) in steps"
               :class="{
 								'steps-item' : true,
-								active : idx === active,
-								done : idx < active
+								active : idx === activeIndex,
+								done : idx < activeIndex
 							}"
               :key="step.title"
             >
@@ -30,20 +30,20 @@
           <div>
             <button
               class="btn"
-              :disabled="disabled"
+              :disabled="isStart"
               @click="prev"
-              v-if="activeIndex === active"
+              v-if="!isFinished"
             >
               Назад
             </button>
             <button
               :class="{
 							btn : true,
-							primary : activeIndex === active
+							primary : !isFinished
 						}"
               @click="next"
             >
-              {{ btnTitle }}
+              {{ btnNextTitle }}
             </button>
           </div>
         </div>

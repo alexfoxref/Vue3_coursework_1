@@ -29,43 +29,47 @@ const App = {
             'Одним из наиболее важных обновлений в Vue 3 является появление альтернативного синтаксиса Composition API. В этом блоке вы узнаете все, чтобы полностью пользоваться данными синтаксисом на практических примерах. Помимо этого вы узнаете как работать совместно с Vue Router и Vuex.',
         },
       ],
-      btnTitle: 'Вперед',
+      isFinished: false,
     }
   },
   methods: {
     prev() {
-      if (this.active > 0) {
-        this.setActive(this.active - 1)
+      if (!this.isStart) {
+        this.setActive(this.activeIndex - 1)
       }
     },
-    reset() {
-      this.setActive(0)
+    next() {
+      if (!this.isFinished) {
+        if (!this.isLastStep) {
+          this.setActive(this.activeIndex + 1)
+        } else {
+          this.isFinished = true
+        }
+      } else {
+        this.restart()
+      }
     },
-    nextOfFinish() {
-      this.setActive(this.activeIndex + 1)
+    restart() {
+      this.isFinished = false
+      this.setActive(0)
     },
     setActive(idx) {
       this.activeIndex = idx
-
-      this.btnTitle =
-        idx === this.steps.length - 1
-          ? 'Закончить'
-          : idx === this.steps.length
-          ? 'Начать заново'
-          : 'Вперед'
     },
   },
   computed: {
-    active() {
-      return this.activeIndex === this.steps.length
-        ? this.activeIndex - 1
-        : this.activeIndex
-    },
-    disabled() {
+    isStart() {
       return this.activeIndex === 0
     },
-    next() {
-      return this.activeIndex === this.active ? this.nextOfFinish : this.reset
+    isLastStep() {
+      return this.activeIndex === this.steps.length - 1 && !this.isFinished
+    },
+    btnNextTitle() {
+      return this.isLastStep
+        ? 'Закончить'
+        : this.isFinished
+        ? 'Начать заново'
+        : 'Вперед'
     },
   },
 }
